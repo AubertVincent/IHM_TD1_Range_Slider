@@ -1,23 +1,17 @@
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.IllegalComponentStateException;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
-import javax.swing.JSlider;
-import javax.swing.LookAndFeel;
-import javax.swing.Timer;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.basic.BasicSliderUI;
 
 public class BasicUI extends BasicSliderUI {
 
 	private enum States {
-		IDLE, LOW_PRESSED, LOW_DRAGGED;
+		IDLE, LOW_PRESSED, LOW_DRAGGED, HIGH_PRESSED, HIGH_DRAGGED;
 	}
 
 	private RangeSlider slider;
@@ -55,7 +49,7 @@ public class BasicUI extends BasicSliderUI {
 		if (clip.intersects(thumbRect)) {
 			paintThumb(g);
 		}
-		
+
 	}
 
 	public void paintThumb(Graphics g) {
@@ -65,7 +59,7 @@ public class BasicUI extends BasicSliderUI {
 			int xvalue = xPositionForValue(value);
 			int yvalue = trackRect.y;
 			thumbRectLow = new Rectangle(xvalue, yvalue, 11, 20);
-		}else {
+		} else {
 			thumbRectLow.y = trackRect.y;
 		}
 		if (thumbRectHigh == null) {
@@ -73,11 +67,9 @@ public class BasicUI extends BasicSliderUI {
 			int xvalue = xPositionForValue(value);
 			int yvalue = trackRect.y;
 			thumbRectHigh = new Rectangle(xvalue, yvalue, 11, 20);
-		}else {
+		} else {
 			thumbRectHigh.y = trackRect.y;
 		}
-		
-		
 
 		Rectangle knobBounds = thumbRectLow;
 		int w = knobBounds.width;
@@ -194,6 +186,9 @@ public class BasicUI extends BasicSliderUI {
 				if (thumbRectLow.contains(e.getPoint())) {
 					lastx = e.getX();
 					current_state = States.LOW_PRESSED;
+				} else if (thumbRectHigh.contains(e.getPoint())) {
+					lastx = e.getX();
+					current_state = States.HIGH_PRESSED;
 				}
 				break;
 			default:
@@ -203,28 +198,49 @@ public class BasicUI extends BasicSliderUI {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
+			int next_position;
 			switch (current_state) {
+			case HIGH_PRESSED:
+				current_state = States.HIGH_DRAGGED;
+			case HIGH_DRAGGED:
+				next_position = thumbRectHigh.x + e.getX() - lastx;
+				if (next_position + thumbRectHigh.width <= trackRect.x + trackRect.width
+						&& (next_position + thumbRectHigh.width) > thumbRectLow.x) {
+					thumbRectHigh.x = next_position;
+					lastx = e.getX();
+					int min = slider.getMinimum();
+					int max = slider.getMaximum();
+					int nb_values = max - min;
+					int value = thumbRectHigh.x / (trackRect.width / nb_values) + min;
+					slider.setLow(value);
+				} else if (next_position < trackRect.x) {
+					thumbRectHigh.x = trackRect.x;
+				} else if ((next_position + thumbRectHigh.width) <= thumbRectLow.x) {
+					thumbRectHigh.x = thumbRectLow.x - thumbRectLow.width - 1;
+				}
+				slider.repaint();
+				break;
+
 			case LOW_PRESSED:
 				current_state = States.LOW_DRAGGED;
 			case LOW_DRAGGED:
-				int next_position = thumbRectLow.x + e.getX()-lastx;
-				if(next_position>=trackRect.x && (next_position+thumbRectLow.width)<thumbRectHigh.x) {
-					thumbRectLow.x =next_position;
+				next_position = thumbRectLow.x + e.getX() - lastx;
+				if (next_position >= trackRect.x && (next_position + thumbRectLow.width) < thumbRectHigh.x) {
+					thumbRectLow.x = next_position;
 					lastx = e.getX();
-					
+
 					int min = slider.getMinimum();
 					int max = slider.getMaximum();
-					int nb_values = max-min;
-					int value = thumbRectLow.x /(trackRect.width/nb_values)+min;
+					int nb_values = max - min;
+					int value = thumbRectLow.x / (trackRect.width / nb_values) + min;
 					slider.setLow(value);
-				}else if(next_position<trackRect.x) {
+				} else if (next_position < trackRect.x) {
 					thumbRectLow.x = trackRect.x;
-				}else if((next_position+thumbRectLow.width)>=thumbRectHigh.x) {
-					thumbRectLow.x = thumbRectHigh.x - thumbRectLow.width -1;
+				} else if ((next_position + thumbRectLow.width) >= thumbRectHigh.x) {
+					thumbRectLow.x = thumbRectHigh.x - thumbRectLow.width - 1;
 				}
 				slider.repaint();
-				
+
 				break;
 			default:
 				break;
@@ -239,6 +255,10 @@ public class BasicUI extends BasicSliderUI {
 			case LOW_PRESSED:
 				current_state = States.IDLE;
 			case LOW_DRAGGED:
+				current_state = States.IDLE;
+			case HIGH_DRAGGED:
+				current_state = States.IDLE;
+			case HIGH_PRESSED:
 				current_state = States.IDLE;
 			default:
 				break;
