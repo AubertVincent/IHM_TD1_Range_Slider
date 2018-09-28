@@ -1,5 +1,3 @@
-import javax.swing.event.ChangeListener;
-
 public interface RangeSlider {
 
 	public int getLow();
@@ -18,8 +16,8 @@ public interface RangeSlider {
 
 	public void setMax(int max);
 
-	public void addChangeListener(ChangeListener x);
-
-	public void removeChangeListener(ChangeListener x);
+	// public void addChangeListener(ChangeListener x);
+	//
+	// public void removeChangeListener(ChangeListener x);
 
 }

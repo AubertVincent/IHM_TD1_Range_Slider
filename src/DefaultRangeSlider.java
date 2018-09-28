@@ -1,7 +1,3 @@
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.EventListenerList;
-
 public class DefaultRangeSlider implements RangeSlider {
 
 	private int low;
@@ -9,8 +5,8 @@ public class DefaultRangeSlider implements RangeSlider {
 	private int max;
 	private int min;
 
-	protected ChangeEvent changeevent;
-	protected EventListenerList eventListenerList;
+	// protected ChangeEvent changeevent;
+	// protected EventListenerList eventListenerList;
 
 	public DefaultRangeSlider(int low, int high, int max, int min) {
 		super();
@@ -52,16 +48,16 @@ public class DefaultRangeSlider implements RangeSlider {
 		this.min = min;
 	}
 
-	@Override
-	public void addChangeListener(ChangeListener x) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void removeChangeListener(ChangeListener x) {
-		// TODO Auto-generated method stub
-
-	}
+	// @Override
+	// public void addChangeListener(ChangeListener x) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	//
+	// @Override
+	// public void removeChangeListener(ChangeListener x) {
+	// // TODO Auto-generated method stub
+	//
+	// }
 
 }
