@@ -210,7 +210,7 @@ public class BasicUI extends BasicSliderUI {
 					lastx = e.getX();
 					int min = slider.getMinimum();
 					int max = slider.getMaximum();
-					int nb_values = max - min;
+					int nb_values = max - min +1;
 					int value = thumbRectHigh.x / (trackRect.width / nb_values) + min;
 					slider.setHigh(value);
 				} else if (next_position + thumbRectHigh.width > trackRect.x + trackRect.width) {
@@ -231,7 +231,7 @@ public class BasicUI extends BasicSliderUI {
 
 					int min = slider.getMinimum();
 					int max = slider.getMaximum();
-					int nb_values = max - min;
+					int nb_values = max - min +1;
 					int value = thumbRectLow.x / (trackRect.width / nb_values) + min;
 					slider.setLow(value);
 				} else if (next_position < trackRect.x) {
