@@ -16,9 +16,9 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 public class BasicUI extends BasicSliderUI {
 
-	// public enum automate {
-	// IDLE, LowSelected, HighSelected, DragLow, DragHigh;
-	// }
+	private enum States {
+		IDLE, LOW_PRESSED, LOW_DRAGGED;
+	}
 
 	private RangeSlider slider;
 	private Rectangle thumbRectLow, thumbRectHigh;
@@ -55,6 +55,7 @@ public class BasicUI extends BasicSliderUI {
 		if (clip.intersects(thumbRect)) {
 			paintThumb(g);
 		}
+		
 	}
 
 	public void paintThumb(Graphics g) {
@@ -64,13 +65,19 @@ public class BasicUI extends BasicSliderUI {
 			int xvalue = xPositionForValue(value);
 			int yvalue = trackRect.y;
 			thumbRectLow = new Rectangle(xvalue, yvalue, 11, 20);
+		}else {
+			thumbRectLow.y = trackRect.y;
 		}
 		if (thumbRectHigh == null) {
 			int value = slider.getHigh();
 			int xvalue = xPositionForValue(value);
 			int yvalue = trackRect.y;
 			thumbRectHigh = new Rectangle(xvalue, yvalue, 11, 20);
+		}else {
+			thumbRectHigh.y = trackRect.y;
 		}
+		
+		
 
 		Rectangle knobBounds = thumbRectLow;
 		int w = knobBounds.width;
@@ -106,8 +113,7 @@ public class BasicUI extends BasicSliderUI {
 		g.drawLine(w - 2, h - 1 - cw, w - 1 - cw, h - 2);
 
 		g.translate(-knobBounds.x, -knobBounds.y);
-		
-		
+
 		knobBounds = thumbRectHigh;
 		w = knobBounds.width;
 		h = knobBounds.height;
@@ -168,26 +174,67 @@ public class BasicUI extends BasicSliderUI {
 
 		return xPosition;
 	}
-	
-	
-	
-	public class BasicTrackListener extends MouseInputAdapter{
-		
-		int lastx;
-		
+
+	private class BasicTrackListener extends MouseInputAdapter {
+
+		private int lastx;
+		private States current_state;
+
+		public BasicTrackListener() {
+			// TODO Auto-generated constructor stub
+			current_state = States.IDLE;
+		}
+
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			if(thumbRectLow.contains(e.getPoint())) {
-				lastx = thumbRectLow.x;
+
+			switch (current_state) {
+			case IDLE:
+				if (thumbRectLow.contains(e.getPoint())) {
+					lastx = e.getX();
+					current_state = States.LOW_PRESSED;
+				}
+				break;
+			default:
+				break;
 			}
 		}
+
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
-			thumbRectLow.x = e.getX();
-			slider.repaint();
+			switch (current_state) {
+			case LOW_PRESSED:
+			case LOW_DRAGGED:
+				thumbRectLow.x += e.getX() - lastx;
+				lastx = e.getX();
+				
+				int min = slider.getMinimum();
+				int max = slider.getMaximum();
+				int nb_values = max-min;
+				int value = thumbRectLow.x /(trackRect.width/nb_values)+min;
+				slider.setLow(value);
+				current_state = States.LOW_DRAGGED;
+				slider.repaint();
+				break;
+			default:
+				break;
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+			switch (current_state) {
+			case LOW_PRESSED:
+				current_state = States.IDLE;
+			case LOW_DRAGGED:
+				current_state = States.IDLE;
+			default:
+				break;
+			}
 		}
 	}
 
