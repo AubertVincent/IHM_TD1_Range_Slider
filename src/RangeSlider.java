@@ -34,6 +34,7 @@ public class RangeSlider extends JSlider implements RangeSliderInterface {
 
 	public void setHigh(int high) {
 		this.high = high;
+		System.out.println(high);
 	}
 
 	public int getMaximum() {

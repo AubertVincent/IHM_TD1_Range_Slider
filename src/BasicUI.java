@@ -205,18 +205,18 @@ public class BasicUI extends BasicSliderUI {
 			case HIGH_DRAGGED:
 				next_position = thumbRectHigh.x + e.getX() - lastx;
 				if (next_position + thumbRectHigh.width <= trackRect.x + trackRect.width
-						&& (next_position + thumbRectHigh.width) > thumbRectLow.x) {
+						&& next_position > thumbRectLow.x + thumbRectLow.width) {
 					thumbRectHigh.x = next_position;
 					lastx = e.getX();
 					int min = slider.getMinimum();
 					int max = slider.getMaximum();
 					int nb_values = max - min;
 					int value = thumbRectHigh.x / (trackRect.width / nb_values) + min;
-					slider.setLow(value);
-				} else if (next_position < trackRect.x) {
-					thumbRectHigh.x = trackRect.x;
-				} else if ((next_position + thumbRectHigh.width) <= thumbRectLow.x) {
-					thumbRectHigh.x = thumbRectLow.x - thumbRectLow.width - 1;
+					slider.setHigh(value);
+				} else if (next_position + thumbRectHigh.width > trackRect.x + trackRect.width) {
+					thumbRectHigh.x  = trackRect.x + trackRect.width - thumbRectHigh.width;
+				} else if (next_position <= thumbRectLow.x + thumbRectLow.width) {
+					thumbRectHigh.x = thumbRectLow.x + thumbRectLow.width + 1;
 				}
 				slider.repaint();
 				break;
