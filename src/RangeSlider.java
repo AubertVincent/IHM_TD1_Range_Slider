@@ -1,23 +1,54 @@
-public interface RangeSlider {
+import javax.swing.JSlider;
 
-	public int getLow();
+public class RangeSlider extends JSlider implements RangeSliderInterface {
 
-	public int getHigh();
+	private int low;
+	private int high;
+	private int max;
+	private int min;
 
-	public int getMax();
+	// protected ChangeEvent changeevent;
+	// protected EventListenerList eventListenerList;
 
-	public int getMin();
+	public RangeSlider(int min, int max, int low, int high) {
+		this.low = low;
+		this.high = high;
+		this.max = max;
+		this.min = min;
 
-	public void setLow(int low);
+		setUI(new BasicUI(this));
+	}
 
-	public void setHigh(int high);
+	public int getLow() {
+		return low;
+	}
 
-	public void setMin(int min);
+	public void setLow(int low) {
+		this.low = low;
+	}
 
-	public void setMax(int max);
+	public int getHigh() {
+		return high;
+	}
 
-	// public void addChangeListener(ChangeListener x);
-	//
-	// public void removeChangeListener(ChangeListener x);
+	public void setHigh(int high) {
+		this.high = high;
+	}
+
+	public int getMaximum() {
+		return max;
+	}
+
+	public void setMaximum(int max) {
+		this.max = max;
+	}
+	
+	public int getMinimum() {
+		return min;
+	}
+
+	public void setMinimum(int min) {
+		this.min = min;
+	}
 
 }
