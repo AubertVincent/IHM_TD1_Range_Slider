@@ -206,17 +206,25 @@ public class BasicUI extends BasicSliderUI {
 			// TODO Auto-generated method stub
 			switch (current_state) {
 			case LOW_PRESSED:
-			case LOW_DRAGGED:
-				thumbRectLow.x += e.getX() - lastx;
-				lastx = e.getX();
-				
-				int min = slider.getMinimum();
-				int max = slider.getMaximum();
-				int nb_values = max-min;
-				int value = thumbRectLow.x /(trackRect.width/nb_values)+min;
-				slider.setLow(value);
 				current_state = States.LOW_DRAGGED;
+			case LOW_DRAGGED:
+				int next_position = thumbRectLow.x + e.getX()-lastx;
+				if(next_position>=trackRect.x && (next_position+thumbRectLow.width)<thumbRectHigh.x) {
+					thumbRectLow.x =next_position;
+					lastx = e.getX();
+					
+					int min = slider.getMinimum();
+					int max = slider.getMaximum();
+					int nb_values = max-min;
+					int value = thumbRectLow.x /(trackRect.width/nb_values)+min;
+					slider.setLow(value);
+				}else if(next_position<trackRect.x) {
+					thumbRectLow.x = trackRect.x;
+				}else if((next_position+thumbRectLow.width)>=thumbRectHigh.x) {
+					thumbRectLow.x = thumbRectHigh.x - thumbRectLow.width -1;
+				}
 				slider.repaint();
+				
 				break;
 			default:
 				break;
