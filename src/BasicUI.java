@@ -16,6 +16,9 @@ public class BasicUI extends BasicSliderUI {
 
 	private RangeSlider slider;
 	private Rectangle thumbRectLow, thumbRectHigh;
+	private int lasttrackwidth;
+	private int lastLow;
+	private int lastHigh;
 
 	public BasicUI(RangeSlider slider) {
 		super(slider);
@@ -53,23 +56,45 @@ public class BasicUI extends BasicSliderUI {
 	}
 
 	public void paintThumb(Graphics g) {
-
+		int xvalue=0;
 		if (thumbRectLow == null) {
 			int value = slider.getLow();
-			int xvalue = xPositionForValue(value);
+			xvalue = xPositionForValue(value);
 			int yvalue = trackRect.y;
 			thumbRectLow = new Rectangle(xvalue, yvalue, 11, 20);
+			lastLow = xvalue;
 		} else {
+			if(trackRect.width != lasttrackwidth) {
+				xvalue = Math.round( (float)(lastLow * trackRect.width) / (float)lasttrackwidth);
+				thumbRectLow.x =xvalue ;
+				lastLow = xvalue;
+			}else {
+				lastLow = thumbRectLow.x;
+				
+			}
 			thumbRectLow.y = trackRect.y;
 		}
+		
+		
 		if (thumbRectHigh == null) {
 			int value = slider.getHigh();
-			int xvalue = xPositionForValue(value);
+			xvalue = xPositionForValue(value);
 			int yvalue = trackRect.y;
 			thumbRectHigh = new Rectangle(xvalue, yvalue, 11, 20);
+			lastHigh = xvalue;
 		} else {
+			if(trackRect.width != lasttrackwidth) {
+				xvalue = Math.round( (float)(lastHigh * trackRect.width) / (float)lasttrackwidth);
+				thumbRectHigh.x = xvalue;
+				lastHigh = xvalue;
+			}else {
+				lastHigh = thumbRectHigh.x;
+			}
+				
 			thumbRectHigh.y = trackRect.y;
 		}
+		
+		lasttrackwidth = trackRect.width;
 
 		Rectangle knobBounds = thumbRectLow;
 		int w = knobBounds.width;
