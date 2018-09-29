@@ -66,7 +66,7 @@ public class BasicUI extends BasicSliderUI {
 			int value = slider.getHigh();
 			int xvalue = xPositionForValue(value);
 			int yvalue = trackRect.y;
-			thumbRectHigh = new Rectangle(xvalue, yvalue, 11, 20);
+			thumbRectHigh = new Rectangle(xvalue - 10, yvalue, 11, 20);
 		} else {
 			thumbRectHigh.y = trackRect.y;
 		}
@@ -104,6 +104,9 @@ public class BasicUI extends BasicSliderUI {
 		g.drawLine(w - 2, 0 + 1, w - 2, h - 2 - cw);
 		g.drawLine(w - 2, h - 1 - cw, w - 1 - cw, h - 2);
 
+		g.setColor(Color.black);
+		g.drawString(Integer.toString(slider.getLow()), -cw / 2, 2 * h);
+
 		g.translate(-knobBounds.x, -knobBounds.y);
 
 		knobBounds = thumbRectHigh;
@@ -139,6 +142,8 @@ public class BasicUI extends BasicSliderUI {
 		g.drawLine(w - 2, 0 + 1, w - 2, h - 2 - cw);
 		g.drawLine(w - 2, h - 1 - cw, w - 1 - cw, h - 2);
 
+		g.setColor(Color.black);
+		g.drawString(Integer.toString(slider.getHigh()), -cw / 2, 2 * h);
 		g.translate(-knobBounds.x, -knobBounds.y);
 	}
 
@@ -210,11 +215,11 @@ public class BasicUI extends BasicSliderUI {
 					lastx = e.getX();
 					int min = slider.getMinimum();
 					int max = slider.getMaximum();
-					int nb_values = max - min +1;
-					int value = thumbRectHigh.x / (trackRect.width / nb_values) + min;
+					int nb_values = max - min + 1;
+					int value = ((thumbRectHigh.x - trackRect.x) / (trackRect.width / nb_values)) + min;
 					slider.setHigh(value);
 				} else if (next_position + thumbRectHigh.width > trackRect.x + trackRect.width) {
-					thumbRectHigh.x  = trackRect.x + trackRect.width - thumbRectHigh.width;
+					thumbRectHigh.x = trackRect.x + trackRect.width - thumbRectHigh.width;
 				} else if (next_position <= thumbRectLow.x + thumbRectLow.width) {
 					thumbRectHigh.x = thumbRectLow.x + thumbRectLow.width + 1;
 				}
@@ -231,8 +236,8 @@ public class BasicUI extends BasicSliderUI {
 
 					int min = slider.getMinimum();
 					int max = slider.getMaximum();
-					int nb_values = max - min +1;
-					int value = thumbRectLow.x / (trackRect.width / nb_values) + min;
+					int nb_values = max - min + 1;
+					int value = ((thumbRectLow.x - trackRect.x) / (trackRect.width / nb_values)) + min;
 					slider.setLow(value);
 				} else if (next_position < trackRect.x) {
 					thumbRectLow.x = trackRect.x;
