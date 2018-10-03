@@ -8,6 +8,8 @@ import javax.swing.JComponent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.basic.BasicSliderUI;
 
+import com.sun.glass.ui.Size;
+
 public class BasicUI extends BasicSliderUI {
 
 	private enum States {
@@ -26,10 +28,12 @@ public class BasicUI extends BasicSliderUI {
 		BasicTrackListener tracker = new BasicTrackListener();
 		slider.addMouseListener(tracker);
 		slider.addMouseMotionListener(tracker);
+		
 	}
 
 	@Override
 	public void paint(Graphics g, JComponent c) {
+//		slider.setBounds(0, 0, trackRect.width, trackRect.height);
 		recalculateIfInsetsChanged();
 		recalculateIfOrientationChanged();
 		Rectangle clip = g.getClipBounds();
@@ -241,10 +245,12 @@ public class BasicUI extends BasicSliderUI {
 					int min = slider.getMinimum();
 					int max = slider.getMaximum();
 					int nb_values = max - min + 1;
-					int value = ((thumbRectHigh.x - trackRect.x) / (trackRect.width / nb_values)) + min;
+					
+					int value = (int)((float)(thumbRectHigh.x - trackRect.x) / ((float)trackRect.width / (float)nb_values)) + min;
 					slider.setHigh(value);
 				} else if (next_position + thumbRectHigh.width > trackRect.x + trackRect.width) {
 					thumbRectHigh.x = trackRect.x + trackRect.width - thumbRectHigh.width;
+					slider.setHigh(slider.getMaximum());
 				} else if (next_position <= thumbRectLow.x + thumbRectLow.width) {
 					thumbRectHigh.x = thumbRectLow.x + thumbRectLow.width + 1;
 				}
@@ -262,10 +268,12 @@ public class BasicUI extends BasicSliderUI {
 					int min = slider.getMinimum();
 					int max = slider.getMaximum();
 					int nb_values = max - min + 1;
-					int value = ((thumbRectLow.x - trackRect.x) / (trackRect.width / nb_values)) + min;
+					
+					int value = (int)((float)(thumbRectLow.x - trackRect.x) / ((float)trackRect.width / (float)nb_values)) + min;
 					slider.setLow(value);
 				} else if (next_position < trackRect.x) {
 					thumbRectLow.x = trackRect.x;
+					slider.setLow(slider.getMinimum());
 				} else if ((next_position + thumbRectLow.width) >= thumbRectHigh.x) {
 					thumbRectLow.x = thumbRectHigh.x - thumbRectLow.width - 1;
 				}
