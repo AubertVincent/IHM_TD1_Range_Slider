@@ -29,6 +29,7 @@ public class Main extends JFrame {
 			@Override
 			public void updateMap(int low, int high) {
 				map.sliderStateRooms(low, high);
+				map.repaint();
 			}
 		};
 		pieces.addListen(listenRooms);
@@ -44,6 +45,7 @@ public class Main extends JFrame {
 			@Override
 			public void updateMap(int low, int high) {
 				map.sliderStateValue(low, high);
+				map.repaint();
 			}
 		};
 		valeur.addListen(listenValue);

@@ -22,6 +22,7 @@ public class RangeSlider extends JSlider implements RangeSliderInterface {
 
 	public void addListen(Listen l) {
 		this.l = l;
+		this.l.updateMap(low, high);
 	}
 
 	public int getLow() {
