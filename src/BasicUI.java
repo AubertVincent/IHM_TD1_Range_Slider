@@ -33,7 +33,6 @@ public class BasicUI extends BasicSliderUI {
 
 	@Override
 	public void paint(Graphics g, JComponent c) {
-//		slider.setBounds(0, 0, trackRect.width, trackRect.height);
 		recalculateIfInsetsChanged();
 		recalculateIfOrientationChanged();
 		Rectangle clip = g.getClipBounds();
@@ -59,6 +58,7 @@ public class BasicUI extends BasicSliderUI {
 
 	}
 
+	@Override
 	public void paintThumb(Graphics g) {
 		int xvalue=0;
 		if (thumbRectLow == null) {

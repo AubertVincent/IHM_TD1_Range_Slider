@@ -10,9 +10,13 @@ public class RangeSlider extends JSlider implements RangeSliderInterface {
 	private int min;
 	private Listen l;
 
-	// protected ChangeEvent changeevent;
-	// protected EventListenerList eventListenerList;
-
+	/**
+	 * 
+	 * @param min 
+	 * @param max
+	 * @param low
+	 * @param high
+	 */
 	public RangeSlider(int min, int max, int low, int high) {
 		this.low = low;
 		this.high = high;
@@ -22,6 +26,10 @@ public class RangeSlider extends JSlider implements RangeSliderInterface {
 		setUI(new BasicUI(this));
 	}
 
+	/**
+	 * Set the Listener to use when values are changed
+	 * @param l the Listener to use
+	 */
 	public void addListen(Listen l) {
 		this.l = l;
 		this.l.updateMap(low, high);

@@ -16,6 +16,12 @@ public class Map extends JComponent {
 	private int roomHigh;
 	private int roomLow;
 
+	/**
+	 * 
+	 * @param width width of the map
+	 * @param height height of the map
+	 * @param nb_home the number of home to initialize
+	 */
 	public Map(int width, int height, int nb_home) {
 
 		this.width = width;
@@ -23,11 +29,21 @@ public class Map extends JComponent {
 		setRandomHomes(nb_home);
 	}
 
+	/**
+	 * Update the high and low values for the home values comparison
+	 * @param low 
+	 * @param high
+	 */
 	public void sliderStateValue(int low, int high) {
 		this.valueHigh = high;
 		this.valueLow = low;
 	}
 
+	/**
+	 * Update the high and low values for the home number of rooms comparison
+	 * @param low
+	 * @param high
+	 */
 	public void sliderStateRooms(int low, int high) {
 		this.roomHigh = high;
 		this.roomLow = low;
@@ -43,6 +59,10 @@ public class Map extends JComponent {
 		paintHomes(g);
 	}
 
+	/**
+	 * Paint every home that matches the conditions
+	 * @param g
+	 */
 	private void paintHomes(Graphics g) {
 		g.setColor(Color.RED);
 		for (Home home : this.homes) {
@@ -53,6 +73,10 @@ public class Map extends JComponent {
 		}
 	}
 
+	/**
+	 * Initialize the list of home
+	 * @param size the size of the list
+	 */
 	public void setRandomHomes(int size) {
 		this.homes = new ArrayList<Home>();
 		for (int i = 0; i < size; i++) {
