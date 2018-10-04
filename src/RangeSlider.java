@@ -6,6 +6,7 @@ public class RangeSlider extends JSlider implements RangeSliderInterface {
 	private int high;
 	private int max;
 	private int min;
+	private Listen l;
 
 	// protected ChangeEvent changeevent;
 	// protected EventListenerList eventListenerList;
@@ -19,12 +20,19 @@ public class RangeSlider extends JSlider implements RangeSliderInterface {
 		setUI(new BasicUI(this));
 	}
 
+	public void addListen(Listen l) {
+		this.l = l;
+	}
+
 	public int getLow() {
 		return low;
 	}
 
 	public void setLow(int low) {
 		this.low = low;
+		if (l != null) {
+			l.updateMap(low, high);
+		}
 	}
 
 	public int getHigh() {
@@ -33,6 +41,9 @@ public class RangeSlider extends JSlider implements RangeSliderInterface {
 
 	public void setHigh(int high) {
 		this.high = high;
+		if (l != null) {
+			l.updateMap(low, high);
+		}
 	}
 
 	public int getMaximum() {
@@ -42,7 +53,7 @@ public class RangeSlider extends JSlider implements RangeSliderInterface {
 	public void setMaximum(int max) {
 		this.max = max;
 	}
-	
+
 	public int getMinimum() {
 		return min;
 	}
