@@ -37,6 +37,7 @@ public class Main extends JFrame {
 		JLabel lab2 = new JLabel("Valeur des maisons");
 		panel.add(lab2);
 		RangeSlider valeur = new RangeSlider(30000,150000,30000,150000);
+		valeur.setSize(new Dimension(200,150));
 //		valeur.setPreferredSize(new Dimension(150,150));
 //		valeur.setMinimumSize(new Dimension(150,150));
 		panel.add(valeur);
