@@ -1,3 +1,7 @@
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,9 +24,14 @@ public class Main extends JFrame {
 		split.setLeftComponent(map);
 
 		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		JLabel lab = new JLabel("Nombre de piÃ¨ces");
-		panel.add(lab);
+		panel.setLayout(new GridBagLayout());
+		JLabel lab = new JLabel("Nombre de pièces");
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridwidth = 3;
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(lab,c);
 		RangeSlider pieces = new RangeSlider(1, 4, 1, 4);
 		Listen listenRooms = new Listen() {
 
@@ -33,12 +42,14 @@ public class Main extends JFrame {
 			}
 		};
 		pieces.addListen(listenRooms);
-		// pieces.setPreferredSize(new Dimension(150,150));
-		// pieces.setMinimumSize(new Dimension(50,150));
-		panel.add(pieces);
+		
+		c.gridy = 1;
+		c.ipady = 50;
+		panel.add(pieces,c);
 		JLabel lab2 = new JLabel("Valeur des maisons");
-		panel.add(lab2);
-
+		c.gridy = 2;
+		panel.add(lab2,c);
+		
 		RangeSlider valeur = new RangeSlider(30000, 150000, 30000, 150000);
 		Listen listenValue = new Listen() {
 
@@ -49,12 +60,12 @@ public class Main extends JFrame {
 			}
 		};
 		valeur.addListen(listenValue);
-		// valeur.setPreferredSize(new Dimension(150,150));
-		// valeur.setMinimumSize(new Dimension(150,150));
-		panel.add(valeur);
+		
+		c.gridy = 3;
+		panel.add(valeur,c);
 
 		split.setRightComponent(panel);
-		split.setDividerLocation(400);
+		split.setDividerLocation(350);
 		main.add(split);
 		main.setVisible(true);
 	}
